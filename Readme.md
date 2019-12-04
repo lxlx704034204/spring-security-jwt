@@ -1,3 +1,18 @@
+
+
+		try {
+			//此写法在jar部署到Linux上的时候,会导致找不到秘钥文件！
+//			privateKey = (RSAPrivateKey) PemUtils.readPrivateKeyFromFile(private_key_file_rsa, "RSA");
+//			publicKey = (RSAPublicKey) PemUtils.readPublicKeyFromFile(public_key_file_rsa, "RSA");
+			//流的方式可解决此问题！
+			InputStream stream_privateKey  = JWTtoken.class.getClassLoader().getResourceAsStream("pkcs8_rsa_private_key.pem");
+			InputStream stream_publicKey   = JWTtoken.class.getClassLoader().getResourceAsStream("rsa_public_key.pem");
+			privateKey = (RSAPrivateKey) PemUtils.readPrivateKey(stream_privateKey, "RSA");
+			publicKey = (RSAPublicKey) PemUtils.readPublicKey(stream_publicKey, "RSA");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 [![Build Status](https://travis-ci.org/Mercateo/spring-security-jwt.svg?branch=master)](https://travis-ci.org/Mercateo/spring-security-jwt)
 [![Coverage Status](https://coveralls.io/repos/github/Mercateo/spring-security-jwt/badge.svg?branch=master)](https://coveralls.io/github/Mercateo/spring-security-jwt?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2f1e375a4f624da59f0dd732e83c491f)](https://app.codacy.com/app/wuan/spring-security-jwt?utm_source=github.com&utm_medium=referral&utm_content=Mercateo/spring-security-jwt&utm_campaign=badger)
